@@ -18,9 +18,10 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Long id = Long.valueOf(req.getParameter("id"));
+        Item item = itemController.getItemById(id);
         try {
-            Long id = Long.valueOf(req.getParameter("id"));
-            Item item = itemController.getItemById(id);
             if (item.getName() != null) {
                 resp.getWriter().println(item.toString());
             } else {
@@ -48,17 +49,11 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+
         try {
-            Long id = Long.valueOf(req.getParameter("id"));
-            Item item = itemController.getItemById(id);
-            if (item.getName() != null) {
-                Item itemForUpdate = parseJSONToObject(req);
-                itemForUpdate.setId(item.getId());
-                itemController.updateItem(itemForUpdate);
-                resp.getWriter().println(itemForUpdate.toString());
-            } else {
-                resp.getWriter().println("Item with id " + id + " not exist");
-            }
+            itemController.updateItem(parseJSONToObject(req));
+            resp.getWriter().println("Item success updated");
         } catch (IOException e) {
             e.printStackTrace();
             resp.getWriter().println("Cant update item  " + e.getMessage());
@@ -95,4 +90,7 @@ public class MyServlet extends HttpServlet {
         }
         return item;
     }
+
+
+
 }
