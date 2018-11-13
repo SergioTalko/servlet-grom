@@ -35,10 +35,11 @@ public class MyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         Item item = parseJSONToObject(req);
         try {
-            itemController.addItem(item);
-            resp.getWriter().println(item.toString());
+            itemController.addItem(parseJSONToObject(req));
+            resp.getWriter().println("Item " + item.toString() + " was successfully saved");
         } catch (IOException e) {
             e.printStackTrace();
             resp.getWriter().println("Cant save item with id " + item.getId() + e.getMessage());
@@ -50,13 +51,13 @@ public class MyServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-
+        Item item = parseJSONToObject(req);
         try {
             itemController.updateItem(parseJSONToObject(req));
-            resp.getWriter().println("Item success updated");
+            resp.getWriter().println("Item " + item.toString() + " was successfully updated");
         } catch (IOException e) {
             e.printStackTrace();
-            resp.getWriter().println("Cant update item  " + e.getMessage());
+            resp.getWriter().println("Cant update item with id " + item.getId() + "/n" + e.getMessage());
         }
     }
 
@@ -90,7 +91,6 @@ public class MyServlet extends HttpServlet {
         }
         return item;
     }
-
 
 
 }
